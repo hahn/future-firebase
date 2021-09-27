@@ -3,6 +3,7 @@ package id.husna.futurefirebaseapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.ktx.Firebase
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
     getToken()
     subscribeTopicNotification()
+    crashMe()
   }
 
   private fun getToken() {
@@ -50,4 +52,12 @@ class MainActivity : AppCompatActivity() {
       Log.d(TAG, "message subscribe: $message")
     }
   }
+
+  private fun crashMe() {
+    val btn = findViewById<Button>(R.id.button)
+    btn.setOnClickListener {
+      throw RuntimeException("Test Crash")
+    }
+  }
+
 }

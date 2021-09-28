@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -12,12 +15,16 @@ import com.google.firebase.messaging.ktx.messaging
 
 class MainActivity : AppCompatActivity() {
   private val TAG = "FirebaseApp"
+  private lateinit var firebaseAnalytics: FirebaseAnalytics
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    firebaseAnalytics = Firebase.analytics
     setContentView(R.layout.activity_main)
     getToken()
     subscribeTopicNotification()
     crashMe()
+    testAnalytics()
   }
 
   private fun getToken() {
@@ -57,6 +64,16 @@ class MainActivity : AppCompatActivity() {
     val btn = findViewById<Button>(R.id.button)
     btn.setOnClickListener {
       throw RuntimeException("Test Crash")
+    }
+  }
+
+  private fun testAnalytics() {
+    val btn2 = findViewById<Button>(R.id.button2)
+    btn2.setOnClickListener {
+      firebaseAnalytics.logEvent("click_button") {
+        param("button_name", "Analytics")
+      }
+      Toast.makeText(this, "button clicked", Toast.LENGTH_LONG).show()
     }
   }
 
